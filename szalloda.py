@@ -17,6 +17,14 @@ class KetagyasSzoba(Szoba):
         super().__init__(szobaszam, 15000)
 
 
+def szamol_foglalas_ar(szoba, datum):
+    nap = datum.weekday()
+    if nap == 4 or nap == 5:
+        return szoba.ar
+    else:
+        return szoba.ar // 2
+
+
 class Szalloda:
     def __init__(self, nev):
         self.nev = nev
@@ -29,7 +37,7 @@ class Szalloda:
     def foglalas(self, szobaszam, datum):
         szoba = next((s for s in self.szobak if s.szobaszam == szobaszam), None)
         if szoba:
-            ar = self.szamol_foglalas_ar(szoba, datum)
+            ar = szamol_foglalas_ar(szoba, datum)
             foglalas = Foglalas(szoba, datum, ar)
             self.foglalasok.append(foglalas)
             print(f"Foglalás sikeres. Az ár: {ar} Ft")
@@ -55,13 +63,6 @@ class Szalloda:
         print("Összes foglalás:")
         for foglalas in self.foglalasok:
             print(f"{foglalas.szoba.szobaszam}: {foglalas.datum} - {foglalas.ar} Ft")
-
-    def szamol_foglalas_ar(self, szoba, datum):
-        nap = datum.weekday()
-        if nap == 4 or nap == 5:
-            return szoba.ar
-        else:
-            return szoba.ar // 2
 
 
 class Foglalas:
